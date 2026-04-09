@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Finder | India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary: #475569;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .transport-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 1000px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+        
+        .transport-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .transport-header {
+            background: var(--gradient);
+            color: white;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .transport-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            z-index: 1;
+        }
+        
+        .transport-header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .transport-header h3 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        
+        .transport-header p {
+            opacity: 0.9;
+            font-size: 18px;
+            max-width: 500px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        
+        .india-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 24px;
+            margin-top: 16px;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(4px);
+        }
+        
+        .india-badge i {
+            margin-right: 8px;
+        }
+        
+        .transport-form {
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            background: var(--light);
+            position: relative;
+        }
+        
+        .form-pattern {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            opacity: 0.03;
+            background: var(--gradient);
+            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+        }
+        
+        .input-group {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .input-group.full-width {
+            grid-column: span 2;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            z-index: 1;
+        }
+        
+        .input-wrapper input, .input-wrapper select {
+            width: 100%;
+            padding: 18px 18px 18px 54px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+            background: white;
+            font-weight: 500;
+        }
+        
+        .input-wrapper input:focus, .input-wrapper select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+        
+        .swap-locations {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 2;
+        }
+        
+        .swap-locations:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-50%) rotate(180deg);
+        }
+        
+        .btn-primary {
+            grid-column: span 2;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .transport-results {
+            padding: 0 32px 32px;
+            display: none;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 28px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .results-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .results-title::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient);
+            border-radius: 6px;
+        }
+        
+        .sort-filter {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .sort-select, .filter-select {
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .sort-select:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .transport-options {
+            display: grid;
+            gap: 24px;
+        }
+        
+        .transport-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .transport-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 0;
+            background: var(--gradient);
+            border-radius: var(--radius) 0 0 var(--radius);
+            transition: var(--transition);
+        }
+        
+        .transport-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+        
+        .transport-card:hover::before {
+            height: 100%;
+        }
+        
+        .transport-card.selected {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+        
+        .transport-card.selected::before {
+            height: 100%;
+        }
+        
+        .best-value {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            background: var(--success);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            z-index: 2;
+        }
+        
+        .transport-icon {
+            width: 60px;
+            height: 60px;
+            background: #eff6ff;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 24px;
+            color: var(--primary);
+            font-size: 24px;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        
+        .transport-card:hover .transport-icon {
+            transform: scale(1.1);
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .transport-details {
+            flex: 1;
+        }
+        
+        .transport-type {
+            font-weight: 800;
+            margin-bottom: 6px;
+            font-size: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .transport-company {
+            color: var(--secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .transport-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            color: var(--secondary);
+            flex-wrap: wrap;
+        }
+        
+        .transport-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .transport-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .price-note {
+            font-size: 12px;
+            color: var(--secondary);
+            font-weight: normal;
+            margin-top: 6px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 24px 0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--secondary);
+            display: none;
+        }
+        
+        .loading i {
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+        
+        .loading p {
+            font-size: 18px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: var(--secondary);
+            display: none;
+        }
+        
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: var(--warning);
+        }
+        
+        .no-results p {
+            font-size: 18px;
+        }
+        
+        .rupee-icon {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+        
+        .carbon-saving {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 900px) {
+            .transport-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .btn-primary {
+                grid-column: span 1;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .sort-filter {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .transport-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 28px;
+            }
+            
+            .transport-icon {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .transport-meta {
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            
+            .transport-price {
+                align-items: center;
+            }
+            
+            .transport-type {
+                justify-content: center;
+            }
+        }
+        
+        /* Animation for cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .transport-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .transport-card:nth-child(2) { animation-delay: 0.1s; }
+        .transport-card:nth-child(3) { animation-delay: 0.2s; }
+        .transport-card:nth-child(4) { animation-delay: 0.3s; }
+        .transport-card:nth-child(5) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <section class="transport-container" id="transport">
+        <div class="transport-header">
+            <div class="transport-header-content">
+                <h3>Find Cheapest Transport</h3>
+                <p>Compare prices across different transportation options in India</p>
+                <div class="india-badge">
+                    <i class="fas fa-rupee-sign"></i>
+                    <span>Prices in Indian Rupees (₹)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="transport-form">
+            <div class="form-pattern"></div>
+            
+            <div class="input-group full-width">
+                <label for="source"><i class="fas fa-map-marker-alt"></i> From</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-location-dot"></i>
+                    <input type="text" id="source" placeholder="Enter your current location" aria-label="Current location" value="Mumbai">
+                    <button class="swap-locations" id="swap-locations" aria-label="Swap locations">
+                        <i class="fas fa-right-left"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="input-group full-width">
+                <label for="destination"><i class="fas fa-flag"></i> To</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-location-dot"></i>
+                    <input type="text" id="destination" placeholder="Enter your destination" aria-label="Destination" value="Delhi">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="passengers"><i class="fas fa-users"></i> Passengers</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <select id="passengers">
+                        <option value="1">1 Passenger</option>
+                        <option value="2">2 Passengers</option>
+                        <option value="3">3 Passengers</option>
+                        <option value="4" selected>4 Passengers</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="date"><i class="fas fa-calendar"></i> Travel Date</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar-days"></i>
+                    <input type="date" id="date" aria-label="Travel date">
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="find-transport">
+                <i class="fas fa-search"></i> Find Transport Options
+            </button>
+        </div>
+        
+        <div class="loading" id="loading-section">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Finding the best transport options for you...</p>
+        </div>
+        
+        <div class="no-results" id="no-results-section">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>No transport options found for your route. Please try different locations.</p>
+        </div>
+        
+        <div class="transport-results" id="results-section">
+            <div class="results-header">
+                <h4 class="results-title">Available Transport Options</h4>
+                <div class="sort-filter">
+                    <select class="sort-select" id="sort-by">
+                        <option value="price">Sort by: Price</option>
+                        <option value="duration">Sort by: Duration</option>
+                        <option value="rating">Sort by: Rating</option>
+                    </select>
+                    <select class="filter-select" id="filter-by">
+                        <option value="all">All Options</option>
+                        <option value="bus">Bus Only</option>
+                        <option value="train">Train Only</option>
+                        <option value="flight">Flights Only</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="transport-options" id="transport-options">
+                <!-- Transport options will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('date').valueAsDate = tomorrow;
+            
+            // Swap locations functionality
+            document.getElementById('swap-locations').addEventListener('click', function() {
+                const sourceInput = document.getElementById('source');
+                const destinationInput = document.getElementById('destination');
+                const tempValue = sourceInput.value;
+                sourceInput.value = destinationInput.value;
+                destinationInput.value = tempValue;
+            });
+            
+            // Find transport button functionality
+            document.getElementById('find-transport').addEventListener('click', function() {
+                findTransportOptions();
+            });
+            
+            // Sort and filter functionality
+            document.getElementById('sort-by').addEventListener('change', function() {
+                sortTransportOptions(this.value);
+            });
+            
+            document.getElementById('filter-by').addEventListener('change', function() {
+                filterTransportOptions(this.value);
+            });
+            
+            // Sample transport data
+            const transportData = [
+                {
+                    type: 'Bus',
+                    company: 'SRT Travels',
+                    duration: '20 hrs 30 mins',
+                    departure: '22:30',
+                    arrival: '19:00',
+                    rating: '4.2',
+                    price: 1899,
+                    passengers: 4,
+                    carbonSaving: true,
+                    bestValue: true,
+                    icon: 'bus'
+                },
+                {
+                    type: 'Train',
+                    company: 'Rajdhani Express',
+                    duration: '16 hrs 15 mins',
+                    departure: '16:00',
+                    arrival: '08:15',
+                    rating: '4.5',
+                    price: 6540,
+                    passengers: 4,
+                    carbonSaving: true,
+                    icon: 'train'
+                },
+                {
+                    type: 'Flight',
+                    company: 'IndiGo Airlines',
+                    duration: '2 hrs 20 mins',
+                    departure: '09:30',
+                    arrival: '11:50',
+                    rating: '4.7',
+                    price: 12499,
+                    passengers: 4,
+                    carbonSaving: false,
+                    icon: 'plane'
+                },
+                {
+                    type: 'Car Rental',
+                    company: 'Zoomcar',
+                    duration: '15 hrs 40 mins',
+                    departure: 'Any time',
+                    arrival: 'Flexible',
+                    rating: '4.3',
+                    price: 7599,
+                    passengers: 4,
+                    carbonSaving: false,
+                    icon: 'car'
+                },
+                {
+                    type: 'Bus',
+                    company: 'VRL Travels',
+                    duration: '22 hrs 10 mins',
+                    departure: '19:00',
+                    arrival: '17:10',
+                    rating: '4.0',
+                    price: 1699,
+                    passengers: 4,
+                    carbonSaving: true,
+                    icon: 'bus'
+                }
+            ];
+            
+            // Function to find transport options
+            function findTransportOptions() {
+                const source = document.getElementById('source').value;
+                const destination = document.getElementById('destination').value;
+                
+                if (!source || !destination) {
+                    alert('Please enter both source and destination locations.');
+                    return;
+                }
+                
+                // Show loading state
+                document.getElementById('loading-section').style.display = 'block';
+                document.getElementById('no-results-section').style.display = 'none';
+                document.getElementById('results-section').style.display = 'none';
+                
+                // Simulate API call delay
+                setTimeout(function() {
+                    document.getElementById('loading-section').style.display = 'none';
+                    
+                    // For demo purposes, always show results
+                    displayTransportOptions(transportData);
+                }, 2000);
+            }
+            
+            // Function to display transport options
+            function displayTransportOptions(data) {
+                const optionsContainer = document.getElementById('transport-options');
+                optionsContainer.innerHTML = '';
+                
+                if (data.length === 0) {
+                    document.getElementById('no-results-section').style.display = 'block';
+                    return;
+                }
+                
+                document.getElementById('results-section').style.display = 'block';
+                
+                data.forEach((option, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'transport-card';
+                    card.innerHTML = `
+                        ${option.bestValue ? '<span class="best-value">BEST VALUE</span>' : ''}
+                        <div class="transport-icon">
+                            <i class="fas fa-${option.icon}"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4 class="transport-type">
+                                ${option.type}
+                                ${option.carbonSaving ? '<span class="carbon-saving"><i class="fas fa-leaf"></i> Eco-friendly</span>' : ''}
+                            </h4>
+                            <p class="transport-company">${option.company} • ⭐ ${option.rating}</p>
+                            <div class="transport-meta">
+                                <span><i class="fas fa-clock"></i> ${option.duration}</span>
+                                <span><i class="fas fa-arrow-right"></i> ${option.departure} → ${option.arrival}</span>
+                                <span><i class="fas fa-users"></i> ${option.passengers} passengers</span>
+                            </div>
+                        </div>
+                        <div class="transport-price">
+                            ₹${option.price.toLocaleString('en-IN')}
+                            <span class="price-note">Total for ${option.passengers} passengers</span>
+                        </div>
+                    `;
+                    
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.transport-card').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                    
+                    optionsContainer.appendChild(card);
+                });
+            }
+            
+            // Function to sort transport options
+            function sortTransportOptions(criteria) {
+                const sortedData = [...transportData];
+                
+                switch(criteria) {
+                    case 'price':
+                        sortedData.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'duration':
+                        // Convert duration to minutes for sorting
+                        sortedData.sort((a, b) => {
+                            const aMinutes = convertDurationToMinutes(a.duration);
+                            const bMinutes = convertDurationToMinutes(b.duration);
+                            return aMinutes - bMinutes;
+                        });
+                        break;
+                    case 'rating':
+                        sortedData.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+                        break;
+                }
+                
+                displayTransportOptions(sortedData);
+            }
+            
+            // Helper function to convert duration string to minutes
+            function convertDurationToMinutes(duration) {
+                const parts = duration.split(' ');
+                let minutes = 0;
+                
+                for (let i = 0; i < parts.length; i++) {
+                    if (parts[i] === 'hrs' || parts[i] === 'hr') {
+                        minutes += parseInt(parts[i-1]) * 60;
+                    } else if (parts[i] === 'mins' || parts[i] === 'min') {
+                        minutes += parseInt(parts[i-1]);
+                    }
+                }
+                
+                return minutes;
+            }
+            
+            // Function to filter transport options
+            function filterTransportOptions(type) {
+                if (type === 'all') {
+                    displayTransportOptions(transportData);
+                    return;
+                }
+                
+                const filteredData = transportData.filter(option => {
+                    return option.icon === type;
+                });
+                
+                displayTransportOptions(filteredData);
+            }
+        });
+    </script>
+</body>
+</html>

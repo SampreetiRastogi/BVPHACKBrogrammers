@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourism & Police Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --secondary: #0e2b5c;
+            --accent: #ff6b35;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #64748b;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card-header i {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        
+        .card-body p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        .card-visual {
+            height: 160px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0 20px;
+        }
+        
+        .card-visual i {
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .heat-map {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(26, 86, 219, 0.3));
+            opacity: 0.7;
+        }
+        
+        .heat-spot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .heat-spot:nth-child(1) {
+            top: 20%;
+            left: 30%;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .heat-spot:nth-child(2) {
+            top: 50%;
+            left: 60%;
+            width: 45px;
+            height: 45px;
+        }
+        
+        .heat-spot:nth-child(3) {
+            top: 30%;
+            left: 70%;
+        }
+        
+        .heat-spot:nth-child(4) {
+            top: 60%;
+            left: 20%;
+            width: 35px;
+            height: 35px;
+        }
+        
+        .id-badge {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        
+        .id-badge i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            opacity: 1;
+        }
+        
+        .alert-bell {
+            animation: ring 2s infinite;
+            transform-origin: center top;
+            z-index: 2;
+        }
+        
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            5% { transform: rotate(15deg); }
+            10% { transform: rotate(-14deg); }
+            15% { transform: rotate(13deg); }
+            20% { transform: rotate(-12deg); }
+            25% { transform: rotate(11deg); }
+            30% { transform: rotate(-10deg); }
+            35% { transform: rotate(9deg); }
+            40% { transform: rotate(-8deg); }
+            45% { transform: rotate(7deg); }
+            50% { transform: rotate(0); }
+            100% { transform: rotate(0); }
+        }
+        
+        .alert-flash {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--danger);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        .alert-flash:nth-child(2) {
+            animation-delay: 0.5s;
+            top: 40%;
+            left: 30%;
+        }
+        
+        .alert-flash:nth-child(3) {
+            animation-delay: 1s;
+            top: 60%;
+            left: 70%;
+        }
+        
+        .document-preview {
+            width: 80%;
+            height: 80%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .document-line {
+            height: 8px;
+            background: #eee;
+            margin-bottom: 6px;
+            border-radius: 2px;
+        }
+        
+        .document-line.short {
+            width: 60%;
+        }
+        
+        .document-line.medium {
+            width: 80%;
+        }
+        
+        .card-footer {
+            padding: 15px 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .stat i {
+            color: var(--primary);
+        }
+        
+        .view-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .view-btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Tourism Department & Police Dashboard</h2>
+                <p>Our comprehensive dashboard provides authorities with real-time insights and tools for effective tourist safety management.</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h3>Tourist Heat Maps</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Real-time visualization of tourist concentrations and movement patterns across regions with predictive analytics for crowd management.</p>
+                        <div class="card-visual">
+                            <i class="fas fa-map"></i>
+                            <div class="heat-map">
+                                <div class="heat-spot"></div>
+                                <div class="heat-spot"></div>
+                                <div class="heat-spot"></div>
+                                <div class="heat-spot"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="stat">
+                                <i class="fas fa-users"></i>
+                                <span>1.2K active</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>24 zones</span>
+                            </div>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-id-card"></i>
+                        <h3>Digital ID Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Access and verify blockchain-secured tourist identities with complete travel history and verification status indicators.</p>
+                        <div class="card-visual">
+                            <div class="id-badge">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="stat">
+                                <i class="fas fa-check-circle"></i>
+                                <span>98% verified</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-database"></i>
+                                <span>5.7K records</span>
+                            </div>
+                        </div>
+                        <button class="view-btn">Verify ID</button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-bell"></i>
+                        <h3>Alert Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Receive, prioritize and respond to safety alerts with integrated communication tools and automated response protocols.</p>
+                        <div class="card-visual">
+                            <i class="fas fa-bell alert-bell"></i>
+                            <div class="alert-flash"></div>
+                            <div class="alert-flash"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="stat">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>3 active</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-clock"></i>
+                                <span>2.4m avg</span>
+                            </div>
+                        </div>
+                        <button class="view-btn">View Alerts</button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>E-FIR Generation</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Automated First Information Report creation for missing persons with all relevant data and multi-language support capabilities.</p>
+                        <div class="card-visual">
+                            <div class="document-preview">
+                                <div class="document-line short"></div>
+                                <div class="document-line"></div>
+                                <div class="document-line medium"></div>
+                                <div class="document-line"></div>
+                                <div class="document-line short"></div>
+                                <div class="document-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="stat">
+                                <i class="fas fa-file-export"></i>
+                                <span>87 generated</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-bolt"></i>
+                                <span>Instant</span>
+                            </div>
+                        </div>
+                        <button class="view-btn">Create Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
